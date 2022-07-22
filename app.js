@@ -5,6 +5,8 @@ const authRoutes=require('./routes/auth');
 const bodyParser=require('body-parser');
 const path=require('path');
 const multer=require('multer'); //npm install --save multer
+const  createServer = require("http");
+const  Server =require("socket.io");
 
 const app=express();
 
@@ -60,7 +62,28 @@ app.use((error, req, res, next) => {
 mongoose
   .connect('mongodb+srv://Mohsin:9844@cluster0.k2jhm.mongodb.net/messages?retryWrites=true&w=majority')
   .then(result => {
-    app.listen(8080);
+
+    const httpServer = createServer();
+    const io = new Server(httpServer, {
+      cors: {
+        origin: "https://localhost:3000",
+        allowedHeaders: ["my-custom-header"],
+        credentials: true
+      }
+    });
+    // const server = app.listen(8080);
+
+    // const io=require('./socket').init(server,{
+    //   cors: {
+    //     origin: '*',
+    //     methods:'GET,POST,PUT,PATCH,DELETE',
+    //     redential:true
+
+    //   }
+    // }); //npm install --save socket.io
+    // io.on('connection',socket=>{
+    //   console.log('client connected');
+    // });
   })
   .catch(err => {
     console.log(err);
